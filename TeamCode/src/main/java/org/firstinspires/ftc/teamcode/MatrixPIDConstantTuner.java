@@ -27,6 +27,7 @@ import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.dtf_base_libraries.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.dtf_base_libraries.MecanumRobotController;
+import org.firstinspires.ftc.teamcode.dtf_base_libraries.MecanumRobotController2;
 import org.firstinspires.ftc.teamcode.dtf_base_libraries.PinpointLocalizer;
 
 /**
@@ -41,7 +42,7 @@ import org.firstinspires.ftc.teamcode.dtf_base_libraries.PinpointLocalizer;
  */
 @TeleOp
 
-public class TargetPoseTest extends LinearOpMode {
+public class MatrixPIDConstantTuner extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -68,7 +69,7 @@ public class TargetPoseTest extends LinearOpMode {
 
         PinpointLocalizer localizer = new PinpointLocalizer(hardwareMap, runtime, new VectorF(0, 0, 0), new VectorF(0, 0, 0), 118, 126, GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD, new GoBildaPinpointDriver.EncoderDirection[]{GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED});
 
-        MecanumRobotController robot = new MecanumRobotController(hardwareMap, runtime, motorNames, reverseList, PIDList, dt, dimensions, localizer);
+        MecanumRobotController2 robot = new MecanumRobotController2(hardwareMap, runtime, motorNames, reverseList, PIDList, dt, dimensions, localizer);
 
         double xt = 0, yt = 0, ht = 0;
         double x = 0, y = 0, h = 0;
@@ -101,27 +102,11 @@ public class TargetPoseTest extends LinearOpMode {
             }
             if(gamepad1.x){
                 kPval+=0.01;
-                robot.setkP(kPval);
-            }
-            if(gamepad1.dpad_left){
-                kPval-=0.01;
-                robot.setkP(kPval);
+                robot.setPIDconstant(1, 2, kPval);
             }
             if(gamepad1.y){
-                kIval+=0.0001;
-                robot.setkI(kIval);
-            }
-            if(gamepad1.dpad_up){
-                kIval-=0.0001;
-                robot.setkI(kIval);
-            }
-            if(gamepad1.b){
-                kDval+=0.001;
-                robot.setkD(kDval);
-            }
-            if(gamepad1.dpad_right){
-                kDval-=0.001;
-                robot.setkD(kDval);
+                kPval-=0.01;
+                robot.setPIDconstant(1, 2, kPval);
             }
             if(gamepad1.left_trigger>0.5){
                 xt=0.6;
