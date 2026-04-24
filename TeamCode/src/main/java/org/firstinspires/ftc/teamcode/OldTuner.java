@@ -41,7 +41,7 @@ import org.firstinspires.ftc.teamcode.dtf_base_libraries.PinpointLocalizer;
  */
 @TeleOp
 @Deprecated
-public class PIDConstantTuner extends LinearOpMode {
+public class OldTuner extends LinearOpMode { //this op mode used to be called PIDConstantTuner
 
     private ElapsedTime runtime = new ElapsedTime();
 
