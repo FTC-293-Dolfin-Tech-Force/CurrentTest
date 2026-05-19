@@ -24,11 +24,11 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.dtf_base_libraries.GoBildaPinpointDriver;
-import org.firstinspires.ftc.teamcode.dtf_base_libraries.MecanumRobotController;
 import org.firstinspires.ftc.teamcode.dtf_base_libraries.MecanumRobotController2;
+import org.firstinspires.ftc.teamcode.dtf_base_libraries.Path;
 import org.firstinspires.ftc.teamcode.dtf_base_libraries.PinpointLocalizer;
+import org.firstinspires.ftc.teamcode.dtf_base_libraries.Spline;
 
 /**
  * This file contains a minimal example of a Linear "OpMode". An OpMode is a 'program' that runs
@@ -42,7 +42,7 @@ import org.firstinspires.ftc.teamcode.dtf_base_libraries.PinpointLocalizer;
  */
 @TeleOp
 
-public class MatrixPIDConstantTuner extends LinearOpMode {
+public class SplineTest extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -75,9 +75,11 @@ public class MatrixPIDConstantTuner extends LinearOpMode {
         double x = 0, y = 0, h = 0;
         int i = 0; int j = 0;
         double sensitivity = -2.0;
-        float kPval = (float) 0.105, kIval = (float) 0.0036, kDval = (float) 0.037;
+        float kPval = (float) 0.60, kIval = (float) 0, kDval = (float) 0.12;
+        double timeNow = 0;
         telemetry.addData("Status", "Initialized");
         telemetry.update();
+
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -96,12 +98,15 @@ public class MatrixPIDConstantTuner extends LinearOpMode {
             VectorF targetPose = new VectorF((float)xt, (float)yt, (float) ht);
             VectorF targetVel = robot.PID(targetPose, runtime.seconds());
             telemetry.addData("Target Vel", "%4.3f, %4.3f, %4.3f", targetVel.get(0), targetVel.get(1), targetVel.get(2));
-            telemetry.addData("runtime.seconds", "%4.3f", runtime.seconds());
+            telemetry.addData("runtime.seconds", "%4.3f", runtime.seconds()-timeNow);
+            if(gamepad1.dpad_down){
+                timeNow = runtime.seconds();
+            }
             if(gamepad1.a) {
                 double error = targetPose.subtracted(robot.getLocalizer().getPose()).magnitude();
                 telemetry.addData("error", "%4.3f", error);
 
-                robot.setTargetPosition(targetPose, runtime.seconds());
+                robot.followPath(new Spline(new double[]{1, 0, -0.5, 0, 0.0417}, new double[]{0, 1, 0, -0.1667, 0, 0.0083}, new double[]{0}), 0.1*(runtime.seconds()-timeNow));
             }
             else{
                 robot.setTargetVelocity(new VectorF(0, 0, 0));
