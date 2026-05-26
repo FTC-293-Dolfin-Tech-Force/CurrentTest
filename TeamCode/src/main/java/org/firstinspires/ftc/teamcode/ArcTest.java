@@ -24,9 +24,9 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+import org.firstinspires.ftc.teamcode.dtf_base_libraries.Arc;
 import org.firstinspires.ftc.teamcode.dtf_base_libraries.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.dtf_base_libraries.MecanumRobotController2;
-import org.firstinspires.ftc.teamcode.dtf_base_libraries.Path;
 import org.firstinspires.ftc.teamcode.dtf_base_libraries.PinpointLocalizer;
 import org.firstinspires.ftc.teamcode.dtf_base_libraries.Spline;
 
@@ -42,7 +42,7 @@ import org.firstinspires.ftc.teamcode.dtf_base_libraries.Spline;
  */
 @TeleOp
 
-public class SplineTest extends LinearOpMode {
+public class ArcTest extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
 
@@ -78,7 +78,7 @@ public class SplineTest extends LinearOpMode {
         float kPval = (float) 0.60, kIval = (float) 0, kDval = (float) 0.12;
         double timeNow = 0;
 
-        Spline path = new Spline(new double[]{1, 0, -0.5, 0, 0.0417}, new double[]{0, 1, 0, -0.1667, 0, 0.0083}, new double[]{0});
+        Arc path = new Arc();
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -167,7 +167,6 @@ public class SplineTest extends LinearOpMode {
             telemetry.addData("Target Derivative", "%4.3f, %4.3f, %4.3f", path.getdx(0.1*(runtime.seconds()-timeNow)), path.getdy(0.1*(runtime.seconds()-timeNow)), path.getdh(0.1*(runtime.seconds()-timeNow)));
             telemetry.update();
 
-            //robot.getLocalizer().updateTelemetry();
 
 
 
